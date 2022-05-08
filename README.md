@@ -31,7 +31,7 @@ Python-backend разработчик, в текущий момент работ
 Техническая литература и заметки по ней:
 <!-- Тут будет ссылка на заметки, если делал их -->
   1. Street Coder _Sedat Kapanoglu_ - прочтено
-  2. Clean Code in Python: Develop maintainable and efficient code _Mariano Anaya_ - читаю на текущий момент
+  2. [Clean Code in Python](/books/clean_code_in_pytnon.md): Develop maintainable and efficient code _Mariano Anaya_ - читаю на текущий момент
 
 
 ### Аналитика Github
