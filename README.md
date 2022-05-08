@@ -20,10 +20,12 @@ Python-backend разработчик, в текущий момент работ
 <code><img height="35" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/ubuntu/ubuntu-plain.svg"/></code>
 
 
-### Проекты собственные и не только
+### Проекты реализованные и идеи
 
 1. [Discord-бот](https://github.com/Roman-AlexeevP/Discord-bot-Runa) для упрощения учебных задач 
 
+<img src="/images/discord-bot-stack.PNG" height="75" width="350">
+  
 ### Саморазвитие, блог и прочая суета
 
 Техническая литература и заметки по ней:
