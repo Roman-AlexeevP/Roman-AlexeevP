@@ -24,7 +24,7 @@ Python-backend разработчик, в текущий момент работ
 
 1. [Discord-бот](https://github.com/Roman-AlexeevP/Discord-bot-Runa) для упрощения учебных задач 
 
-<img src="/images/discord-bot-stack.PNG" height="75" width="350">
+<img src="/images/discord-bot-stack.PNG" height="75" width="350" alt="discord-study-bot">
   
 ### Саморазвитие, блог и прочая суета
 
