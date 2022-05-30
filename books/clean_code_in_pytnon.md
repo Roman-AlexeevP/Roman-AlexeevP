@@ -94,3 +94,104 @@ if os.path.exissts(filename):
 ```
 
 Первый фрагмент, возможно, является более показательным и удобным для чтения, так как конкретно показывает возможные ошибки и их обработку.
+
+# Декораторы
+Конструкция языка и паттерн проектирования для выделения нового слоя абстракции вокруг изменяемого объекта, минимально изменяя его функционал, например: скорость выполнения функции, повторный запуск с контролируемым исключением, сериализация данных 
+
+## Как задаются декораторы в python
+
+Классическая форма декоратора - использование функций высшего порядка(тех, которые берут в аргументы другие функции):
+
+```py
+def timer(function):
+	@wraps(function)
+	def wrapped(*args, **kwargs):
+		start_time = tiem.time()
+		function(*args, **kwargs)
+		end_time = time.time()
+		print(f"Time for function {function.__name__}: {end_time-start_time}")
+		
+	return wrapped
+```
+
+Теперь декоратор в виде класса с использованием магического метода `__call__()`, для примера напишем декоратор с повторным запуском функции в случае заданного исключения:
+
+```py
+class WithRetry():
+	
+	def __init__(self,
+	 	retries_limit: int = DEFAULT_RETRIES_LIMIT,
+	 	allowed_exceptions:Optional[Sequence[Exception]] = None) -> None:
+		self.retries_limit = retries_limit
+		self.allowed_exceptions = allowed_exceptions or (ControlledException, )
+
+	def __call__(self, operation):
+		@wraps(operation)
+		def wrapped(*args, **kwargs):
+			last_raised_exception = None
+			for _ in range(self.retries_limit):
+				try:
+					operation(*args, **kwargs)
+				except self.allowed_exceptions as e:
+					logger.warning(f"retrying {operation.__qualname__} due to {e}")
+					last_raised_exception = e
+			raise last_raised_exception
+		return wrapped
+
+@WithRetry(retries_limit=5)
+def run_with_retries_limit(task):
+	return task.run()
+		
+```
+
+Передача аргументов в функцию-декоратор происходит через добавление третьей функции, принимающей аргументы для самого декоратора:
+
+```py
+def retry(retries_limit: int = DEFAULT_RETRIES_LIMIT,
+	 	allowed_exceptions:Optional[Sequence[Exception]] = None):
+	 	def decorator_function(operation):
+	 		@wraps(operation)
+	 		def wrapped(*args, **kwargs):
+	 			allowed_exceptions = allowed_exceptions or (ControlledException, )
+	 			last_raised_exception = None
+				for _ in range(retries_limit):
+					try:
+						operation(*args, **kwargs)
+					except allowed_exceptions as e:
+						logger.warning(f"retrying {operation.__qualname__} due to {e}")
+						last_raised_exception = e
+				raise last_raised_exception
+			return wrapped
+		return decorator_function
+
+```
+
+
+## Польза декораторов и возможные пути использования 
+
+- Отслеживание кода
+
+Всевозможное профилирование кода, отслеживание логов и работа с исключениями - все это отличные абстракции, реализуемые декоратором
+
+- Преобразование параметров
+
+Работа с легаси или импортируемой библиотекой для более прозрачного и ясного интерфейса также может быть решена с помиощью декоратора,
+ только в данном случае необходимо понимать, что происхожите действительно упрощение, а не дальнейшее усложнение использования функции
+
+- Валидация данных
+
+В данной случае мы можем проверять предусловия наших абстракций, если следуем методике разработке по контракту(DbС)
+
+- Механизм повторного запуска функций
+
+См. выше примеры
+
+- Вынесение общего из классов в декоратор(DRY)
+
+## Ошибки при использовании декораторов
+
+1. Игнорирование или незнание functools.wraps: без данного декоратора метаданные оборачиваемой функции не будут доступны внутри декоратора(например __qualname__ будет функции из декоратора, а не обернутой им)
+2. Вынесение бьольшего количества логики вне wrapped функции и множество побочных эффектов от декоратора может привести к неожиданной работе программы
+3. Создание декоратора первым делом, до понимания абстракции. Для соблюдения DRY мы начинаем с начала работы с коды создавать декораторы и продумывать их логику, что является достаточно сильным усложнением программы и преждевременной оптимизацией. Лучше дождаться использования минимум 3 раз данного концепта и тогда уже создавать абстракцию.
+
+
