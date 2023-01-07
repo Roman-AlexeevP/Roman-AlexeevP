@@ -3,7 +3,7 @@
 [![Telegram](https://img.shields.io/badge/-Telegram-0088cc?style=flat-square&logo=Telegram&logoColor=white)](https://t.me/alexeevroman_p)
 
 ### Обо мне
-Python-backend разработчик, в текущий момент работаю над проектом на **Django** по автоматизации ведения документов в компании АО "РИРВ". 
+Python-backend разработчик, в текущий момент работаю над проектами на **Django**.
 
 ### Какие инструменты использую
 Основной стек: 
